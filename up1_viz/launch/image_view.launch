@@ -1,0 +1,24 @@
+<launch>
+  <arg name="stereo" default="False" />
+  <arg name="compressed" default="False" />
+
+  <node name="image_view_left" pkg="image_view" type="image_view" respawn="false" output="screen">
+    <remap from="image" to="/stereo/left/image_raw" />
+    <param name="autosize" value="true" />
+    <param name="image_transport" value="compressed" if="$(arg compressed)" />
+  </node>
+  <node name="image_view_right" pkg="image_view" type="image_view" respawn="false" output="screen">
+    <remap from="image" to="/stereo/right/image_raw" />
+    <param name="autosize" value="true" />
+    <param name="image_transport" value="compressed" if="$(arg compressed)" />
+  </node>
+
+  <node name="image_view_stereo" pkg="image_view" type="stereo_view" respawn="false" output="screen" if="$(arg stereo)">
+    <remap from="stereo" to="stereo" />
+    <remap from="image" to="image_rect_color" />
+    <param name="autosize" value="true" />
+    <param name="image_transport" value="compressed" if="$(arg compressed)" />
+    <param name="approximate_sync" value="true" />
+    <param name="queue_size" value="10" />
+  </node>
+</launch>
