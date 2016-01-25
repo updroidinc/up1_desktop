@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="model" />
+  <arg name="gui" default="False" />
+
+  <!-- Robot description -->
+  <include file="$(find up1_description)/launch/description.launch" />
+
+  <!-- Start RViz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find up1_viz)/rviz/urdf.rviz" />
+
+  <!-- Start joint state publisher -->
+  <param name="use_gui" value="$(arg gui)" />
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+  <!-- Given the published joint states, publish tf for the robot links -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+
+</launch>
